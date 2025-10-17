@@ -66,18 +66,19 @@ const comunasDeEjemplo = [
 
 
 // Este es un ORGANISMO. Es una combinación de moléculas y/o átomos que forman una sección completa.
-function FormularioRegistro({ onRegister }) {
-  // 1. Creamos un 'estado' para cada campo del formulario
-  const [run, setRun] = useState('');
-  const [nombre, setNombre] = useState('');
-  const [apellidos, setApellidos] = useState('');
-  const [email, setEmail] = useState('');
-  const [fechaNacimiento, setFechaNacimiento] = useState('');
-  const [region, setRegion] = useState('');
-  const [comuna, setComuna] = useState('');
-  const [direccion, setDireccion] = useState('');
+function FormularioRegistro({ onRegister, showRoleSelector = false, initialData = null }) {
+  // Creamos un 'estado' para cada campo del formulario
+  const [run, setRun] = useState(initialData?.run || '');
+  const [nombre, setNombre] = useState(initialData?.nombre || '');
+  const [apellidos, setApellidos] = useState(initialData?.apellidos || '');
+  const [email, setEmail] = useState(initialData?.email || '');
+  const [fechaNacimiento, setFechaNacimiento] = useState(initialData?.fechaNacimiento || '');
+  const [region, setRegion] = useState(initialData?.region || '');
+  const [comuna, setComuna] = useState(initialData?.comuna || '');
+  const [direccion, setDireccion] = useState(initialData?.direccion || '');
   const [password, setPassword] = useState('');
   const [confirmarPassword, setConfirmarPassword] = useState('');
+  const [rol, setRol] = useState(initialData?.roll || 'cliente');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,59 +95,146 @@ function FormularioRegistro({ onRegister }) {
     }
 
     // Validación simple: Verificar que las contraseñas coincidan
-    if (password !== confirmarPassword) {
+    if (password !== confirmarPassword && !initialData) {
       alert("Las contraseñas no coinciden.");
       return;
     }
     
-    const formData = { run, nombre, apellidos, email, fechaNacimiento, region, comuna, direccion, password };
+    const formData = { run, nombre, apellidos, email, fechaNacimiento, region, comuna, direccion, password, rol};
     
     // Mostramos todos los datos en la consola para verificar
     // y enviamos los datos al componente padre
     onRegister(formData);
 
-    alert(`¡Gracias por registrarte, ${nombre}!`)
+    // mensaje de alerta al editar
+    if (initialData) {
+      //la alerta ya esta en App.js
+    } else {
+      alert(`!Gracias por registrate, ${nombre}!`);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3 className="mb-4 text-center fw-bold">Registrarse</h3>
+      <h3 className="mb-4 text-center fw-bold">
+        {/* Titulo dinámico */}
+        {initialData ? 'Editar Usuario' : (showRoleSelector ? 'Crear Usuario' : 'Registrarse')}
+      </h3>
 
-      <CampoFormulario label="RUN" type="text" name="run" value={run} onChange={(e) => setRun(e.target.value)} placeholder="Sin puntos ni guion" />
+      {/* RUN */}
+      <CampoFormulario 
+        label="RUN" 
+        type="text" 
+        name="run" 
+        value={run} 
+        onChange={(e) => setRun(e.target.value)} 
+        placeholder="Sin puntos ni guion" 
+      />
 
-      {/* Usamos el sistema de grilla de Bootstrap para poner Nombre y Apellidos en la misma fila */}
+      {/* NOMBRE Y APELLIDO*/}
       <div className="row">
         <div className="col-md-6">
-          <CampoFormulario label="Nombre" type="text" name="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+          <CampoFormulario 
+            label="Nombre" 
+            type="text" 
+            name="nombre" 
+            value={nombre} 
+            onChange={(e) => setNombre(e.target.value)} 
+          />
         </div>
         <div className="col-md-6">
-          <CampoFormulario label="Apellidos" type="text" name="apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} />
+          <CampoFormulario 
+            label="Apellidos" 
+            type="text" 
+            name="apellidos" 
+            value={apellidos} 
+            onChange={(e) => setApellidos(e.target.value)} 
+          />
         </div>
       </div>
       
-      <CampoFormulario label="Correo Electrónico" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      {/* CORREO */}
+      <CampoFormulario 
+        label="Correo Electrónico" 
+        type="email" 
+        name="email" 
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)} 
+        disabled={!!initialData} // Este campo no se puede editar en el modo edición
+      />
       
-      {/* Reutilizamos CampoFormulario para el tipo 'date' */}
-      <CampoFormulario label="Fecha de Nacimiento (Opcional)" type="date" name="fechaNacimiento" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
+      {/* FECHA NACIMIENTO */}
+      <CampoFormulario 
+        label="Fecha de Nacimiento (Opcional)" 
+        type="date" 
+        name="fechaNacimiento" 
+        value={fechaNacimiento} 
+        onChange={(e) => setFechaNacimiento(e.target.value)} 
+      />
       
+      {/* REGION Y COMUNA*/}
       <div className="row">
         <div className="col-md-6">
-          <SelectorFormulario label="Región" name="region" value={region} onChange={(e) => setRegion(e.target.value)} options={regionesDeChile} />
+          <SelectorFormulario 
+            label="Región" 
+            name="region" 
+            value={region} 
+            onChange={(e) => setRegion(e.target.value)} 
+            options={regionesDeChile} 
+          />
         </div>
         <div className="col-md-6">
-          <SelectorFormulario label="Comuna" name="comuna" value={comuna} onChange={(e) => setComuna(e.target.value)} options={comunasDeEjemplo}/>
+          <SelectorFormulario 
+            label="Comuna" 
+            name="comuna" 
+            value={comuna} 
+            onChange={(e) => setComuna(e.target.value)} 
+            options={comunasDeEjemplo}
+          />
         </div>
       </div>
 
-      <CampoFormulario label="Dirección" type="text" name="direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
+      {/* DIRECCION */}
+      <CampoFormulario 
+        label="Dirección" 
+        type="text" 
+        name="direccion" 
+        value={direccion} 
+        onChange={(e) => setDireccion(e.target.value)} 
+      />
 
-      <CampoFormulario label="Contraseña" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      {/* CONTRASEÑA Y CONFIRMAR CONTRASEÑA*/}
+      <CampoFormulario 
+        label="Contraseña" 
+        type="password" 
+        name="password" 
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)} 
+      />
+      <CampoFormulario 
+        label="Confirmar Contraseña" 
+        type="password" 
+        name="confirmarPassword" 
+        value={confirmarPassword} 
+        onChange={(e) => setConfirmarPassword(e.target.value)} 
+      />
       
-      <CampoFormulario label="Confirmar Contraseña" type="password" name="confirmarPassword" value={confirmarPassword} onChange={(e) => setConfirmarPassword(e.target.value)} />
-      
+      {/* Este campo solo se muestra si showRoleSelector es TRUE */}
+      {/* ROL USUARIO */}
+      {showRoleSelector && (
+        <SelectorFormulario
+          label="Rol de Usuario"
+          name="rol"
+          value={rol}
+          onChange={(e) => setRol(e.target.value)}
+          options={['cliente', 'vendedor', 'admin']}
+          />
+      )}
+
+      {/* BOTON CONFIRMACIÓN (tambien dinamico)*/}
       <div className="d-grid mt-3">
           <button className="btn btn-primary btn-lg" type="submit">
-              Registrarse
+              {initialData ? 'Guardar Cambios' : (showRoleSelector ? 'Crear Usuario' : 'Registrarse')}
           </button>
       </div>
     </form>

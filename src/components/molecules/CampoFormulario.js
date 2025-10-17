@@ -10,7 +10,7 @@ import React from 'react';
 // - placeholder: Texto que se muestra cuando el campo está vacío (opcional).
 // - className: Clases CSS adicionales para personalizar el estilo (opcional).
 
-function CampoFormulario({ label, type = 'text', name, value, onChange, placeholder = '', className = '' }) {
+function CampoFormulario({ label, type = 'text', name, value, onChange, placeholder = '', className = '', disabled = false }) {
 
     // Esto es lo que se va a mostrar en pantalla
     return (
@@ -20,7 +20,9 @@ function CampoFormulario({ label, type = 'text', name, value, onChange, placehol
                 required 
                 value={value}
                 onChange={onChange}
-                placegolder = {placeholder}
+                name={name}
+                placeholder={placeholder}
+                disabled={disabled} 
             />
             <label>{label}</label>
         </div>

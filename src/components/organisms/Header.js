@@ -1,29 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Importamos Link para navegación
 import logo from '../../assets/images/logo.png'; // Asegúrate que la ruta a tu logo sea correcta
 
-// 1. Recibimos la nueva función 'onNavigate' en los props
-function Header({ usuario = null, onNavigate, onLogout }) {
+
+function Header({ usuario = null, onLogout }) {
 
   const renderUserActions = () => {
     // --- VISTA PARA USUARIO NO LOGUEADO ---
     if (!usuario) {
       return (
         <>
-          {/* 2. Agregamos el evento onClick a los botones */}
-          <button 
-            className="btn btn-outline-primary me-2" 
-            type="button" 
-            onClick={() => onNavigate('login')}
-          >
+          <Link to="/login" className="btn btn-outline-primary me-2">
             Iniciar Sesión
-          </button>
-          <button 
-            className="btn btn-primary" 
-            type="button"
-            onClick={() => onNavigate('registro')}
-          >
+          </Link>
+          <Link to="/registro" className="btn btn-primary">
             Registrarse
-          </button>
+          </Link>
         </>
       );
     }
@@ -73,7 +65,7 @@ function Header({ usuario = null, onNavigate, onLogout }) {
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container-fluid">
         <a className="navbar-brand d-flex align-items-center" href="#">
-          <img src={logo} alt="El Baúl del Chancho Logo" width="120" />
+          <img src={logo} alt="El Baúl del Chancho Logo" width="80" />
           <span className="ms-2 fw-bold">El Baúl del Chancho</span>
         </a>
         
