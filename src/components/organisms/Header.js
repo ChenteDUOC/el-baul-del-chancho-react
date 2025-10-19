@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Importamos Link para navegación
-import logo from '../../assets/images/logo.png'; // Asegúrate que la ruta a tu logo sea correcta
-
 
 function Header({ usuario = null, onLogout }) {
 
@@ -26,9 +24,9 @@ function Header({ usuario = null, onLogout }) {
       case 'vendedor':
         return (
           <>
-            <a className="nav-link" href="#">Inicio</a>
-            <a className="nav-link" href="#">Productos</a>
-            <a className="nav-link" href="#">Órdenes</a>
+            <Link className="nav-link me-3" to="/vendedor">Inicio</Link>
+            <Link className="nav-link me-3" to="/vendedor/productos">Productos</Link>
+            <Link className="nav-link me-3" to="/vendedor/ordenes">Órdenes</Link>
             <button className="btn btn-danger ms-3" type="button" onClick={onLogout}>Cerrar Sesión</button>
           </>
         );
@@ -47,14 +45,16 @@ function Header({ usuario = null, onLogout }) {
       default:
         return (
           <div className="d-flex align-items-center">
-            <a className="nav-link" href="#">Inicio</a>
-            <a className="nav-link" href="#">Productos</a>
-            <a className="nav-link" href="#">Nosotros</a>
-            <a className="nav-link" href="#">Blogs</a>
-            <a className="nav-link" href="#">Contacto</a>
+            <Link className="nav-link me-3" to="/home">Inicio</Link>
+            <Link className="nav-link me-3" to="/productos">Productos</Link>
+            <Link className="nav-link me-3" to="/nosotros">Nosotros</Link>
+            <Link className="nav-link me-3" to="/blogs">Blogs</Link>
+            <Link className="nav-link" to="/contacto">Contacto</Link>
             <div className="ms-4">
-              <button className="btn btn-outline-primary me-2" type="button">Ver Carrito</button>
-              <button className="btn btn-danger ms-3" type="button" onClick={onLogout}>Cerrar Sesión</button>
+              <Link to="/carrito" className="btn btn-outline-primary me-2">
+                Ver Carrito
+                </Link>
+              <button className="btn btn-danger" type="button" onClick={onLogout}>Cerrar Sesión</button>
             </div>
           </div>
         );
@@ -65,7 +65,7 @@ function Header({ usuario = null, onLogout }) {
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container-fluid">
         <a className="navbar-brand d-flex align-items-center" href="#">
-          <img src={logo} alt="El Baúl del Chancho Logo" width="80" />
+          <img src="/assets/images/logo.png" alt="El Baúl del Chancho Logo" width="80" />
           <span className="ms-2 fw-bold">El Baúl del Chancho</span>
         </a>
         

@@ -13,7 +13,7 @@ function AdminSidebar() {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="/admin/products" className="nav-link text-white">
+                    <NavLink to="/admin/productos" className="nav-link text-white">
                         Gestión de Productos
                     </NavLink>
                 </li>
