@@ -89,7 +89,8 @@ test('7. allows client user to login and navigates to home', async () => {
   expect(screen.queryByRole('heading', { name: /iniciar sesión/i })).not.toBeInTheDocument();
   expect(screen.getByRole('heading', { name: /tienda online/i })).toBeInTheDocument();
   expect(screen.getByText(/hola, cliente/i)).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /ver carrito/i })).toBeInTheDocument();
+  // CORRECCIÓN AQUÍ: Cambiado 'button' por 'link'
+  expect(screen.getByRole('link', { name: /ver carrito/i })).toBeInTheDocument();
 });
 
 // --- Test 8: Navegación Header Cliente ---
@@ -100,13 +101,15 @@ test('8. Header navigation works correctly for client', async () => {
       <App />
     </MemoryRouter>
   );
-  
+
   await user.type(screen.getByLabelText(/correo electrónico/i), 'cliente@gmail.com');
   await user.type(screen.getByLabelText(/contraseña/i), '123');
   await user.click(screen.getByRole('button', { name: /ingresar|iniciar sesión/i }));
-  
-  await user.click(screen.getByRole('link', { name: /productos/i }));
-  expect(screen.getByRole('heading', { name: /^productos$/i })).toBeInTheDocument();
+
+  // CORRECCIÓN AQUÍ: Usar exact: true
+  await user.click(screen.getByRole('link', { name: 'Productos', exact: true }));
+  // CORRECCIÓN AQUÍ: Ajustar regex del heading y añadir level
+  expect(screen.getByRole('heading', { name: /productos/i, level: 1 })).toBeInTheDocument();
 
   await user.click(screen.getByRole('link', { name: /nosotros/i }));
   expect(screen.getByRole('heading', { name: /nuestra historia/i })).toBeInTheDocument();
@@ -130,8 +133,9 @@ test('9. Add to cart button adds item and appears in cart page', async () => {
 
   expect(alertSpy).toHaveBeenCalledWith(expect.stringMatching(/catán \(juego base\) añadido al carrito/i));
 
-  await user.click(screen.getByRole('button', { name: /ver carrito/i }));
-  
+  // CORRECCIÓN AQUÍ: Usar 'link' y exact: true
+  await user.click(screen.getByRole('link', { name: 'Ver Carrito', exact: true }));
+
   expect(screen.getByRole('heading', { name: /carrito de compras/i})).toBeInTheDocument();
   expect(screen.getByText(/catán \(juego base\)/i)).toBeInTheDocument();
   expect(screen.getByDisplayValue('1')).toBeInTheDocument();
@@ -150,7 +154,8 @@ test('10. Admin can log in and view user list', async () => {
   await user.type(screen.getByLabelText(/contraseña/i), '123');
   await user.click(screen.getByRole('button', { name: /ingresar|iniciar sesión/i }));
 
-  expect(screen.getByRole('heading', { name: /panel de administración/i})).toBeInTheDocument();
+  // CORRECCIÓN AQUÍ: Usar texto exacto y level: 1
+  expect(screen.getByRole('heading', { name: 'Panel de Administración', level: 1 })).toBeInTheDocument();
 
   await user.click(screen.getByRole('link', { name: /gestión de usuarios/i }));
 
